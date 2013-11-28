@@ -45,16 +45,18 @@
 		
 		// iframe 在提交完成之后
 		iframe.load(function() {
-			var contents = $(this).contents().get(0);
-			var data = $(contents).find('body').text();
-			if ('json' == opts.dataType) {
-				data = window.eval('(' + data + ')');
-			}
-			opts.onComplate(data);
-			setTimeout(function() {
-				iframe.remove();
-				form.remove();
-			}, 5000);
+		 iframe.unbind().load(function () {
+                var contents = $(this).contents().get(0);
+                var data = $(contents).find('body').text();
+                if ('json' == opts.dataType) {
+                    data = window.eval('(' + data + ')');
+                }
+                opts.onComplate(data);
+                setTimeout(function () {
+                    iframe.remove();
+                    form.remove();
+                }, 5000);
+            });
 		});
 		
 		// 文件框
