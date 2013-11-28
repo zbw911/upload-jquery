@@ -20,3 +20,15 @@ easy to use
 					alert(data);
 			}
 	});
+	
+	
+	
+               服务端返回，使用MVC时
+               
+               public ActionResult Upload()
+        {
+            return Content(Dev.Comm.Web.WindowNameData.StringData("OK"));
+
+        }
+        
+        见dev.com.web, 项目中相应方法。
