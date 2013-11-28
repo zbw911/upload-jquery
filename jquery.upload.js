@@ -3,7 +3,8 @@
  * http://www.ponxu.com
  *
  * @author xwz
- * @modify zbw911
+ * @modify zbw911 https://github.com/zbw911/upload-jquery/
+ *  
 
  */
 (function ($) {
@@ -56,6 +57,9 @@
                 .load(function () {
                     var resp = frameWin.name;
                     iframe.remove();
+
+                    resp = window.eval('(' + resp + ')');
+
                     opts.onComplate(resp);
                 });
 
