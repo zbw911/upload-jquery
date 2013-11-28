@@ -55,12 +55,17 @@
             iframe
                 .unbind()
                 .load(function () {
-                    var resp = frameWin.name;
+                    if (frameWin) {
+                        var resp = frameWin.name;
+                        if (resp.name) {
+                            resp = window.eval('(' + resp + ')');
+                            opts.onComplate(resp);
+                        }
+                    } else {
+                        
+                    }
+
                     iframe.remove();
-
-                    resp = window.eval('(' + resp + ')');
-
-                    opts.onComplate(resp);
                 });
 
             frameWin.location = 'about:blank';
