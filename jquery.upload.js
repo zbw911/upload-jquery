@@ -16,6 +16,7 @@
         fileName: 'filedata',
         dataType: 'json',
         params: {},
+        exts: '',//扩展名
         onSend: noop,
         onComplate: noop
     };
@@ -36,8 +37,11 @@
         var form = $('<form method="post" style="display:none;" enctype="multipart/form-data" />').attr('name', 'form_' + frameName);
         form.attr("target", frameName).attr('action', opts.url);
 
+
         // form中增加数据域
-        var formHtml = '<input type="file" name="' + opts.fileName + '" onchange="onChooseFile(this)">';
+        var formHtml = '<input type="file" name="' + opts.fileName + '" onchange="onChooseFile(this,\'' + options.exts + '\')">';
+
+
         for (key in opts.params) {
             formHtml += '<input type="hidden" name="' + key + '" value="' + opts.params[key] + '">';
         }
@@ -55,16 +59,16 @@
             iframe
                 .unbind()
                 .load(function () {
-                    if (frameWin) {
+
+                    if (frameWin.name != frameName) {
                         var resp = frameWin.name;
-                        if (resp.name) {
+                        if (resp) {
                             resp = window.eval('(' + resp + ')');
                             opts.onComplate(resp);
                         }
                     } else {
-                        
+                        // window.alert("取消上传");
                     }
-
                     iframe.remove();
                 });
 
@@ -78,7 +82,28 @@
 })(jQuery);
 
 // 选中文件, 提交表单(开始上传)
-var onChooseFile = function (fileInputDOM) {
-    var form = $(fileInputDOM).parent();
+var onChooseFile = function (fileInputDom, exts) {
+    var form = $(fileInputDom).parent();
+    var filename = $(fileInputDom).val();
+
+    var fileext = filename.substring(filename.lastIndexOf(".") + 1);
+  
+    if (exts != '*' && exts != null && exts != 'undefined') {
+        var ok = false;
+        var arext = exts.split(',');
+        for (var ext in arext) {
+           
+            if (arext[ext] && arext[ext].toLowerCase() == fileext) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok) {
+            window.alert('文件类型' + fileext + '不允许上传');
+            return false;
+        }
+    }
+
+
     form.submit();
 };
